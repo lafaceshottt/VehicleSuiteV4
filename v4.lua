@@ -6,7 +6,14 @@ local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
 local LocalPlayer = Players.LocalPlayer
 
--- GUI Configuration
+-- GUI Configuration (Directly from V3)
+local SIDEBAR_SIZE = UDim2.new(0, 250, 0, 600)
+local SIDEBAR_POSITION_OFF = UDim2.new(0, -260, 0.5, -300)
+local SIDEBAR_POSITION_ON = UDim2.new(0, 10, 0.5, -300)
+local BUTTON_SIZE = UDim2.new(0, 200, 0, 50)
+local SLIDER_SIZE = UDim2.new(0, 200, 0, 80)
+local TOGGLE_SIZE = UDim2.new(0, 200, 0, 50)
+local SPACING = UDim.new(0, 15)
 local BACKGROUND_COLOR = Color3.fromRGB(30, 30, 30)
 local BACKGROUND_TRANSPARENCY = 0.2
 local TEXT_COLOR = Color3.fromRGB(200, 200, 200)
@@ -16,26 +23,81 @@ local GLOW_COLOR = Color3.fromRGB(100, 100, 100)
 local GLOW_TRANSPARENCY = 0.5
 local ACCENT_COLOR = Color3.fromRGB(50, 50, 50)
 local HIGHLIGHT_COLOR = Color3.fromRGB(70, 70, 70)
+
+-- Animation Settings
 local TWEEN_INFO = TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
--- Sidebar Configuration
-local SIDEBAR_SIZE = UDim2.new(0, 250, 0, 600)
-local SIDEBAR_POSITION_OFF = UDim2.new(0, -260, 0.5, -300)
-local SIDEBAR_POSITION_ON = UDim2.new(0, 10, 0.5, -300)
-local BUTTON_SIZE = UDim2.new(0, 200, 0, 50)
-local SLIDER_SIZE = UDim2.new(0, 200, 0, 80)
-local TOGGLE_SIZE = UDim2.new(0, 200, 0, 50)
-local SPACING = UDim.new(0, 15)
-
--- GUI Initialization
+-- GUI Initialization (V3 Exact)
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "GreenvilleVehicleSuiteV4"
+ScreenGui.Name = "GreenvilleVehicleSuite"
 ScreenGui.Parent = game.CoreGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.Enabled = true
 print("ScreenGui initialized")
 
--- Welcome Frame
+-- Sidebar Frame (V3 Exact)
+local SidebarFrame = Instance.new("Frame")
+SidebarFrame.Size = SIDEBAR_SIZE
+SidebarFrame.Position = SIDEBAR_POSITION_OFF
+SidebarFrame.BackgroundColor3 = BACKGROUND_COLOR
+SidebarFrame.BackgroundTransparency = BACKGROUND_TRANSPARENCY
+SidebarFrame.BorderSizePixel = 0
+SidebarFrame.ClipsDescendants = true
+SidebarFrame.Parent = ScreenGui
+print("SidebarFrame created")
+
+local SidebarCorner = Instance.new("UICorner")
+SidebarCorner.CornerRadius = UDim.new(0, 15)
+SidebarCorner.Parent = SidebarFrame
+
+local SidebarGlow = Instance.new("UIStroke")
+SidebarGlow.Thickness = 2
+SidebarGlow.Color = GLOW_COLOR
+SidebarGlow.Transparency = GLOW_TRANSPARENCY
+SidebarGlow.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+SidebarGlow.Parent = SidebarFrame
+
+-- Title with Added Credits
+local SidebarTitle = Instance.new("TextLabel")
+SidebarTitle.Size = UDim2.new(1, 0, 0, 40)
+SidebarTitle.Position = UDim2.new(0, 0, 0, 10)
+SidebarTitle.BackgroundTransparency = 1
+SidebarTitle.Text = "Vehicle Suite"
+SidebarTitle.TextColor3 = TEXT_COLOR
+SidebarTitle.TextSize = 24
+SidebarTitle.Font = TEXT_FONT
+SidebarTitle.TextXAlignment = Enum.TextXAlignment.Center
+SidebarTitle.Parent = SidebarFrame
+
+local CreditsLabel = Instance.new("TextLabel")
+CreditsLabel.Size = UDim2.new(1, 0, 0, 20)
+CreditsLabel.Position = UDim2.new(0, 0, 0, 40)
+CreditsLabel.BackgroundTransparency = 1
+CreditsLabel.Text = "by WeDontGAF Community"
+CreditsLabel.TextColor3 = TEXT_COLOR
+CreditsLabel.TextSize = 14
+CreditsLabel.Font = TEXT_FONT
+CreditsLabel.TextXAlignment = Enum.TextXAlignment.Center
+CreditsLabel.Parent = SidebarFrame
+print("Title and credits added")
+
+-- Scrolling Content (V3 Exact, adjusted height for credits)
+local ScrollFrame = Instance.new("ScrollingFrame")
+ScrollFrame.Size = UDim2.new(1, 0, 1, -70)
+ScrollFrame.Position = UDim2.new(0, 0, 0, 60)
+ScrollFrame.BackgroundTransparency = 1
+ScrollFrame.ScrollBarThickness = 5
+ScrollFrame.ScrollBarImageColor3 = GLOW_COLOR
+ScrollFrame.Parent = SidebarFrame
+print("ScrollFrame created")
+
+local ScrollLayout = Instance.new("UIListLayout")
+ScrollLayout.Padding = SPACING
+ScrollLayout.SortOrder = Enum.SortOrder.LayoutOrder
+ScrollLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+ScrollLayout.Parent = ScrollFrame
+
+-- Welcome Message (V3 Exact)
 local WelcomeFrame = Instance.new("Frame")
 WelcomeFrame.Size = UDim2.new(0, 400, 0, 200)
 WelcomeFrame.Position = UDim2.new(0.5, -200, 0.5, -100)
@@ -43,6 +105,7 @@ WelcomeFrame.BackgroundColor3 = BACKGROUND_COLOR
 WelcomeFrame.BackgroundTransparency = BACKGROUND_TRANSPARENCY
 WelcomeFrame.Parent = ScreenGui
 WelcomeFrame.ZIndex = 10
+print("WelcomeFrame created")
 
 local WelcomeCorner = Instance.new("UICorner")
 WelcomeCorner.CornerRadius = UDim.new(0, 15)
@@ -74,192 +137,9 @@ WelcomeText.TextSize = 24
 WelcomeText.Font = TEXT_FONT
 WelcomeText.TextWrapped = true
 WelcomeText.Parent = WelcomeFrame
-print("WelcomeFrame setup complete")
+print("Welcome message setup complete")
 
--- Version Selection Menu
-local VersionMenu = Instance.new("Frame")
-VersionMenu.Size = UDim2.new(0, 300, 0, 400)
-VersionMenu.Position = UDim2.new(0.5, -150, 0.5, -200)
-VersionMenu.BackgroundColor3 = BACKGROUND_COLOR
-VersionMenu.BackgroundTransparency = BACKGROUND_TRANSPARENCY
-VersionMenu.Parent = ScreenGui
-VersionMenu.ZIndex = 15
-VersionMenu.Visible = false
-
-local VersionCorner = Instance.new("UICorner")
-VersionCorner.CornerRadius = UDim.new(0, 15)
-VersionCorner.Parent = VersionMenu
-
-local VersionGlow = Instance.new("UIStroke")
-VersionGlow.Thickness = 2
-VersionGlow.Color = GLOW_COLOR
-VersionGlow.Transparency = GLOW_TRANSPARENCY
-VersionGlow.Parent = VersionMenu
-
-local VersionTitle = Instance.new("TextLabel")
-VersionTitle.Size = UDim2.new(1, 0, 0, 50)
-VersionTitle.Position = UDim2.new(0, 0, 0, 20)
-VersionTitle.BackgroundTransparency = 1
-VersionTitle.Text = "Select Version"
-VersionTitle.TextColor3 = TEXT_COLOR
-VersionTitle.TextSize = 28
-VersionTitle.Font = TEXT_FONT
-VersionTitle.TextXAlignment = Enum.TextXAlignment.Center
-VersionTitle.Parent = VersionMenu
-
-local FreeButton = Instance.new("TextButton")
-FreeButton.Size = UDim2.new(0, 200, 0, 60)
-FreeButton.Position = UDim2.new(0.5, -100, 0, 100)
-FreeButton.BackgroundColor3 = ACCENT_COLOR
-FreeButton.TextColor3 = TEXT_COLOR
-FreeButton.TextSize = 20
-FreeButton.Font = TEXT_FONT
-FreeButton.Text = "Free Version"
-FreeButton.BorderSizePixel = 0
-FreeButton.Parent = VersionMenu
-local FreeCorner = Instance.new("UICorner")
-FreeCorner.CornerRadius = UDim.new(0, 10)
-FreeCorner.Parent = FreeButton
-local FreeGlow = Instance.new("UIStroke")
-FreeGlow.Thickness = 1
-FreeGlow.Color = GLOW_COLOR
-FreeGlow.Transparency = GLOW_TRANSPARENCY
-FreeGlow.Parent = FreeButton
-
-local PaidButton = Instance.new("TextButton")
-PaidButton.Size = UDim2.new(0, 200, 0, 60)
-PaidButton.Position = UDim2.new(0.5, -100, 0, 180)
-PaidButton.BackgroundColor3 = ACCENT_COLOR
-PaidButton.TextColor3 = TEXT_COLOR
-PaidButton.TextSize = 20
-PaidButton.Font = TEXT_FONT
-PaidButton.Text = "Paid Version"
-PaidButton.BorderSizePixel = 0
-PaidButton.Parent = VersionMenu
-local PaidCorner = Instance.new("UICorner")
-PaidCorner.CornerRadius = UDim.new(0, 10)
-PaidCorner.Parent = PaidButton
-local PaidGlow = Instance.new("UIStroke")
-PaidGlow.Thickness = 1
-PaidGlow.Color = GLOW_COLOR
-PaidGlow.Transparency = GLOW_TRANSPARENCY
-PaidGlow.Parent = PaidButton
-
--- Paid Version Not Available Screen
-local PaidScreen = Instance.new("Frame")
-PaidScreen.Size = UDim2.new(0, 300, 0, 400)
-PaidScreen.Position = UDim2.new(0.5, -150, 0.5, -200)
-PaidScreen.BackgroundColor3 = BACKGROUND_COLOR
-PaidScreen.BackgroundTransparency = BACKGROUND_TRANSPARENCY
-PaidScreen.Parent = ScreenGui
-PaidScreen.ZIndex = 20
-PaidScreen.Visible = false
-
-local PaidCorner = Instance.new("UICorner")
-PaidCorner.CornerRadius = UDim.new(0, 15)
-PaidCorner.Parent = PaidScreen
-
-local PaidGlow = Instance.new("UIStroke")
-PaidGlow.Thickness = 2
-PaidGlow.Color = GLOW_COLOR
-PaidGlow.Transparency = GLOW_TRANSPARENCY
-PaidGlow.Parent = PaidScreen
-
-local PaidText = Instance.new("TextLabel")
-PaidText.Size = UDim2.new(1, 0, 0, 100)
-PaidText.Position = UDim2.new(0, 0, 0, 100)
-PaidText.BackgroundTransparency = 1
-PaidText.Text = "Not Available\nWork in Progress"
-PaidText.TextColor3 = TEXT_COLOR
-PaidText.TextSize = 24
-PaidText.Font = TEXT_FONT
-PaidText.TextWrapped = true
-PaidText.TextXAlignment = Enum.TextXAlignment.Center
-PaidText.Parent = PaidScreen
-
-local BackButton = Instance.new("TextButton")
-BackButton.Size = UDim2.new(0, 200, 0, 60)
-BackButton.Position = UDim2.new(0.5, -100, 0, 250)
-BackButton.BackgroundColor3 = ACCENT_COLOR
-BackButton.TextColor3 = TEXT_COLOR
-BackButton.TextSize = 20
-BackButton.Font = TEXT_FONT
-BackButton.Text = "Back"
-BackButton.BorderSizePixel = 0
-BackButton.Parent = PaidScreen
-local BackCorner = Instance.new("UICorner")
-BackCorner.CornerRadius = UDim.new(0, 10)
-BackCorner.Parent = BackButton
-local BackGlow = Instance.new("UIStroke")
-BackGlow.Thickness = 1
-BackGlow.Color = GLOW_COLOR
-BackGlow.Transparency = GLOW_TRANSPARENCY
-BackGlow.Parent = BackButton
-
--- Sidebar Frame (Loaded Later)
-local SidebarFrame
-local function InitializeSidebar()
-    SidebarFrame = Instance.new("Frame")
-    SidebarFrame.Size = SIDEBAR_SIZE
-    SidebarFrame.Position = SIDEBAR_POSITION_OFF
-    SidebarFrame.BackgroundColor3 = BACKGROUND_COLOR
-    SidebarFrame.BackgroundTransparency = BACKGROUND_TRANSPARENCY
-    SidebarFrame.BorderSizePixel = 0
-    SidebarFrame.ClipsDescendants = true
-    SidebarFrame.Parent = ScreenGui
-    print("SidebarFrame created")
-
-    local SidebarCorner = Instance.new("UICorner")
-    SidebarCorner.CornerRadius = UDim.new(0, 15)
-    SidebarCorner.Parent = SidebarFrame
-
-    local SidebarGlow = Instance.new("UIStroke")
-    SidebarGlow.Thickness = 2
-    SidebarGlow.Color = GLOW_COLOR
-    SidebarGlow.Transparency = GLOW_TRANSPARENCY
-    SidebarGlow.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    SidebarGlow.Parent = SidebarFrame
-
-    local SidebarTitle = Instance.new("TextLabel")
-    SidebarTitle.Size = UDim2.new(1, 0, 0, 40)
-    SidebarTitle.Position = UDim2.new(0, 0, 0, 10)
-    SidebarTitle.BackgroundTransparency = 1
-    SidebarTitle.Text = "Vehicle Suite V4"
-    SidebarTitle.TextColor3 = TEXT_COLOR
-    SidebarTitle.TextSize = 24
-    SidebarTitle.Font = TEXT_FONT
-    SidebarTitle.TextXAlignment = Enum.TextXAlignment.Center
-    SidebarTitle.Parent = SidebarFrame
-
-    local CreditsLabel = Instance.new("TextLabel")
-    CreditsLabel.Size = UDim2.new(1, 0, 0, 20)
-    CreditsLabel.Position = UDim2.new(0, 0, 0, 40)
-    CreditsLabel.BackgroundTransparency = 1
-    CreditsLabel.Text = "by WeDontGAF Community"
-    CreditsLabel.TextColor3 = TEXT_COLOR
-    CreditsLabel.TextSize = 14
-    CreditsLabel.Font = TEXT_FONT
-    CreditsLabel.TextXAlignment = Enum.TextXAlignment.Center
-    CreditsLabel.Parent = SidebarFrame
-
-    local ScrollFrame = Instance.new("ScrollingFrame")
-    ScrollFrame.Size = UDim2.new(1, 0, 1, -70)
-    ScrollFrame.Position = UDim2.new(0, 0, 0, 60)
-    ScrollFrame.BackgroundTransparency = 1
-    ScrollFrame.ScrollBarThickness = 5
-    ScrollFrame.ScrollBarImageColor3 = GLOW_COLOR
-    ScrollFrame.Parent = SidebarFrame
-
-    local ScrollLayout = Instance.new("UIListLayout")
-    ScrollLayout.Padding = SPACING
-    ScrollLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    ScrollLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    ScrollLayout.Parent = ScrollFrame
-
-    return ScrollFrame
-end
-
--- Helper Functions
+-- Helper Functions (V3 Exact)
 local function CreateButton(text, parent, callback)
     local Button = Instance.new("TextButton")
     Button.Size = BUTTON_SIZE
@@ -345,13 +225,13 @@ local function CreateSlider(text, parent, min, max, default, callback)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             dragging = true
             TweenService:Create(SliderKnob, TWEEN_INFO, {Size = UDim2.new(0, 25, 0, 25)}):Play()
-        end)
+        end
     end)
     SliderKnob.InputEnded:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             dragging = false
             TweenService:Create(SliderKnob, TWEEN_INFO, {Size = UDim2.new(0, 20, 0, 20)}):Play()
-        end)
+        end
     end)
     UserInputService.InputChanged:Connect(function(input)
         if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
@@ -360,7 +240,7 @@ local function CreateSlider(text, parent, min, max, default, callback)
             SliderKnob.Position = UDim2.new(relativeX, -10, 0, 27.5)
             ValueLabel.Text = math.floor(value)
             callback(math.floor(value))
-        end)
+        end
     end)
     return Container
 end
@@ -405,7 +285,7 @@ local function CreateToggle(text, parent, default, callback)
     return Container
 end
 
--- Notification System
+-- Notification System (V3 Exact)
 local function Notify(message, duration)
     local Notification = Instance.new("Frame")
     Notification.Size = UDim2.new(0, 250, 0, 60)
@@ -413,7 +293,7 @@ local function Notify(message, duration)
     Notification.BackgroundColor3 = BACKGROUND_COLOR
     Notification.BackgroundTransparency = BACKGROUND_TRANSPARENCY
     Notification.Parent = ScreenGui
-    Notification.ZIndex = 25
+    Notification.ZIndex = 15
     local NotifyCorner = Instance.new("UICorner")
     NotifyCorner.CornerRadius = UDim.new(0, 10)
     NotifyCorner.Parent = Notification
@@ -441,13 +321,13 @@ local function Notify(message, duration)
     end)
 end
 
--- Sound Effects
+-- Sound Effects (V3 Exact)
 local ClickSound = Instance.new("Sound")
 ClickSound.SoundId = "rbxassetid://6895079853"
 ClickSound.Volume = 0.5
 ClickSound.Parent = SoundService
 
--- Vehicle Detection
+-- Vehicle Detection (V3 Exact)
 local function GetVehicle()
     local Character = LocalPlayer.Character
     if not Character then return nil end
@@ -460,10 +340,11 @@ local function GetVehicle()
     return nil
 end
 
--- Vehicle Modification Variables
+-- Vehicle Modification Variables (Adjusted from V3)
+local horsepowerMultiplier = 1
 local torqueMultiplier = 1
 local boostEnabled = false
-local boostStrength = 10
+local boostStrength = 10 -- Toned down from 50
 local suspensionHeight = 0
 local driftMode = false
 local wheelSizeMultiplier = 1
@@ -471,150 +352,153 @@ local topSpeedCap = 0
 local flightEnabled = false
 local underglowEnabled = false
 
--- Sidebar Setup Function
-local function SetupSidebar()
-    local ScrollFrame = InitializeSidebar()
-    
-    CreateSlider("Torque Multiplier", ScrollFrame, 1, 5, 1, function(value)
-        torqueMultiplier = value
-        Notify("Torque set to " .. value .. "x")
-    end)
+-- Sidebar Options (V3 Base with Adjustments)
+CreateSlider("Horsepower Multiplier", ScrollFrame, 1, 5, 1, function(value)
+    horsepowerMultiplier = value
+    Notify("Horsepower set to " .. value .. "x")
+end)
 
-    CreateToggle("Boost Enabled", ScrollFrame, false, function(value)
-        boostEnabled = value
-        Notify("Boost " .. (value and "Enabled" or "Disabled"))
-    end)
+CreateSlider("Torque Multiplier", ScrollFrame, 1, 5, 1, function(value)
+    torqueMultiplier = value
+    Notify("Torque set to " .. value .. "x")
+end)
 
-    CreateSlider("Boost Strength", ScrollFrame, 0, 50, 10, function(value)
-        boostStrength = value
-        Notify("Boost strength set to " .. value)
-    end)
+CreateToggle("Boost Enabled", ScrollFrame, false, function(value)
+    boostEnabled = value
+    Notify("Boost " .. (value and "Enabled" or "Disabled"))
+end)
 
-    CreateToggle("Drift Mode", ScrollFrame, false, function(value)
-        driftMode = value
-        Notify("Drift Mode " .. (value and "Enabled" or "Disabled"))
-    end)
+CreateSlider("Boost Strength", ScrollFrame, 0, 50, 10, function(value)
+    boostStrength = value
+    Notify("Boost strength set to " .. value)
+end)
 
-    CreateSlider("Top Speed Cap", ScrollFrame, 0, 300, 0, function(value)
-        topSpeedCap = value
-        Notify("Top speed cap set to " .. (value == 0 and "Unlimited" or value .. " studs/sec"))
-    end)
+CreateToggle("Drift Mode", ScrollFrame, false, function(value)
+    driftMode = value
+    Notify("Drift Mode " .. (value and "Enabled" or "Disabled"))
+end)
 
-    CreateSlider("Suspension Height", ScrollFrame, -5, 5, 0, function(value)
-        suspensionHeight = value
-        local Vehicle = GetVehicle()
-        if Vehicle then
-            for _, spring in pairs(Vehicle:GetDescendants()) do
-                if spring:IsA("SpringConstraint") then
-                    spring.FreeLength = math.clamp(1 + value * 0.2, 0.1, 10)
-                end
+CreateSlider("Top Speed Cap", ScrollFrame, 0, 300, 0, function(value)
+    topSpeedCap = value
+    Notify("Top speed cap set to " .. (value == 0 and "Unlimited" or value .. " studs/sec"))
+end)
+
+CreateSlider("Suspension Height", ScrollFrame, -5, 5, 0, function(value)
+    suspensionHeight = value
+    local Vehicle = GetVehicle()
+    if Vehicle then
+        for _, spring in pairs(Vehicle:GetDescendants()) do
+            if spring:IsA("SpringConstraint") then
+                spring.FreeLength = math.clamp(1 + value * 0.2, 0.1, 10)
             end
         end
-        Notify("Suspension height set to " .. value)
-    end)
+    end
+    Notify("Suspension height set to " .. value)
+end)
 
-    CreateButton("Slam Suspension", ScrollFrame, function()
-        local Vehicle = GetVehicle()
-        if Vehicle then
-            for _, spring in pairs(Vehicle:GetDescendants()) do
-                if spring:IsA("SpringConstraint") then
-                    spring.FreeLength = 0.1
-                end
-            end
-            suspensionHeight = -5
-            Notify("Suspension slammed")
-        end
-    end)
-
-    CreateButton("Lift Suspension", ScrollFrame, function()
-        local Vehicle = GetVehicle()
-        if Vehicle then
-            for _, spring in pairs(Vehicle:GetDescendants()) do
-                if spring:IsA("SpringConstraint") then
-                    spring.FreeLength = 10
-                end
-            end
-            suspensionHeight = 5
-            Notify("Suspension lifted")
-        end
-    end)
-
-    CreateSlider("Wheel Size Multiplier", ScrollFrame, 0.5, 4, 1, function(value)
-        wheelSizeMultiplier = value
-        local Vehicle = GetVehicle()
-        if Vehicle then
-            for _, wheel in pairs(Vehicle:GetDescendants()) do
-                if wheel:IsA("BasePart") and wheel.Name:lower():find("wheel") then
-                    wheel.Size = Vector3.new(1, 1, 1) * value
-                end
+CreateButton("Slam Suspension", ScrollFrame, function()
+    local Vehicle = GetVehicle()
+    if Vehicle then
+        for _, spring in pairs(Vehicle:GetDescendants()) do
+            if spring:IsA("SpringConstraint") then
+                spring.FreeLength = 0.1
             end
         end
-        Notify("Wheel size set to " .. value .. "x")
-    end)
+        suspensionHeight = -5
+        Notify("Suspension slammed")
+    end
+end)
 
-    CreateToggle("Flight Mode", ScrollFrame, false, function(value)
-        flightEnabled = value
-        Notify("Flight Mode " .. (value and "Enabled" or "Disabled"))
-    end)
-
-    CreateToggle("Car Underglow", ScrollFrame, false, function(value)
-        underglowEnabled = value
-        local Vehicle = GetVehicle()
-        if Vehicle and value then
-            for _, part in pairs(Vehicle:GetDescendants()) do
-                if part:IsA("BasePart") and part.Name:lower():find("chassis") then
-                    local Underglow = Instance.new("PointLight")
-                    Underglow.Name = "UnderglowLight"
-                    Underglow.Color = Color3.fromRGB(0, 200, 200)
-                    Underglow.Brightness = 0.5
-                    Underglow.Range = 8
-                    Underglow.Parent = part
-                end
-            end
-        elseif Vehicle then
-            for _, part in pairs(Vehicle:GetDescendants()) do
-                local glow = part:FindFirstChild("UnderglowLight")
-                if glow then glow:Destroy() end
+CreateButton("Lift Suspension", ScrollFrame, function()
+    local Vehicle = GetVehicle()
+    if Vehicle then
+        for _, spring in pairs(Vehicle:GetDescendants()) do
+            if spring:IsA("SpringConstraint") then
+                spring.FreeLength = 10
             end
         end
-        Notify("Underglow " .. (value and "Enabled" or "Disabled"))
-    end)
+        suspensionHeight = 5
+        Notify("Suspension lifted")
+    end
+end)
 
-    CreateButton("Reset Vehicle", ScrollFrame, function()
-        local Vehicle = GetVehicle()
-        if Vehicle then
-            torqueMultiplier = 1
-            boostEnabled = false
-            boostStrength = 10
-            suspensionHeight = 0
-            driftMode = false
-            wheelSizeMultiplier = 1
-            topSpeedCap = 0
-            flightEnabled = false
-            underglowEnabled = false
-            for _, spring in pairs(Vehicle:GetDescendants()) do
-                if spring:IsA("SpringConstraint") then
-                    spring.FreeLength = 1
-                end
+CreateSlider("Wheel Size Multiplier", ScrollFrame, 0.5, 4, 1, function(value)
+    wheelSizeMultiplier = value
+    local Vehicle = GetVehicle()
+    if Vehicle then
+        for _, wheel in pairs(Vehicle:GetDescendants()) do
+            if wheel:IsA("BasePart") and wheel.Name:lower():find("wheel") then
+                wheel.Size = Vector3.new(1, 1, 1) * value
             end
-            for _, wheel in pairs(Vehicle:GetDescendants()) do
-                if wheel:IsA("BasePart") and wheel.Name:lower():find("wheel") then
-                    wheel.Size = Vector3.new(1, 1, 1)
-                end
-            end
-            for _, part in pairs(Vehicle:GetDescendants()) do
-                local glow = part:FindFirstChild("UnderglowLight")
-                if glow then glow:Destroy() end
-            end
-            Notify("Vehicle reset to default")
         end
-    end)
+    end
+    Notify("Wheel size set to " .. value .. "x")
+end)
 
-    ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, ScrollLayout.AbsoluteContentSize.Y + 20)
-    print("Sidebar options added")
-end
+CreateToggle("Flight Mode", ScrollFrame, false, function(value)
+    flightEnabled = value
+    Notify("Flight Mode " .. (value and "Enabled" or "Disabled"))
+end)
 
--- Physics Logic
+CreateToggle("Car Underglow", ScrollFrame, false, function(value)
+    underglowEnabled = value
+    local Vehicle = GetVehicle()
+    if Vehicle and value then
+        for _, part in pairs(Vehicle:GetDescendants()) do
+            if part:IsA("BasePart") and part.Name:lower():find("chassis") then
+                local Underglow = Instance.new("PointLight")
+                Underglow.Name = "UnderglowLight"
+                Underglow.Color = Color3.fromRGB(0, 200, 200)
+                Underglow.Brightness = 0.5
+                Underglow.Range = 8
+                Underglow.Parent = part
+            end
+        end
+    elseif Vehicle then
+        for _, part in pairs(Vehicle:GetDescendants()) do
+            local glow = part:FindFirstChild("UnderglowLight")
+            if glow then glow:Destroy() end
+        end
+    end
+    Notify("Underglow " .. (value and "Enabled" or "Disabled"))
+end)
+
+CreateButton("Reset Vehicle", ScrollFrame, function()
+    local Vehicle = GetVehicle()
+    if Vehicle then
+        horsepowerMultiplier = 1
+        torqueMultiplier = 1
+        boostEnabled = false
+        boostStrength = 10
+        suspensionHeight = 0
+        driftMode = false
+        wheelSizeMultiplier = 1
+        topSpeedCap = 0
+        flightEnabled = false
+        underglowEnabled = false
+        for _, spring in pairs(Vehicle:GetDescendants()) do
+            if spring:IsA("SpringConstraint") then
+                spring.FreeLength = 1
+            end
+        end
+        for _, wheel in pairs(Vehicle:GetDescendants()) do
+            if wheel:IsA("BasePart") and wheel.Name:lower():find("wheel") then
+                wheel.Size = Vector3.new(1, 1, 1)
+            end
+        end
+        for _, part in pairs(Vehicle:GetDescendants()) do
+            local glow = part:FindFirstChild("UnderglowLight")
+            if glow then glow:Destroy() end
+        end
+        Notify("Vehicle reset to default")
+    end
+end)
+
+-- Update Scroll Canvas Size (V3 Exact)
+ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, ScrollLayout.AbsoluteContentSize.Y + 20)
+print("Scroll options added")
+
+-- Physics Logic (V3 Base with Fixes)
 RunService.Stepped:Connect(function()
     local Vehicle = GetVehicle()
     if not Vehicle or not Vehicle.PrimaryPart then return end
@@ -623,13 +507,13 @@ RunService.Stepped:Connect(function()
     
     local velocity = SeatPart.AssemblyLinearVelocity
     local forwardVector = SeatPart.CFrame.LookVector
-    local adjustedVelocity = velocity * (1 + (torqueMultiplier - 1) * 0.2)
+    local adjustedVelocity = velocity * (1 + (horsepowerMultiplier - 1) * 0.2) -- Toned down from V3
     if driftMode then
         adjustedVelocity = adjustedVelocity + (forwardVector * torqueMultiplier * 0.2)
         SeatPart.AssemblyAngularVelocity = Vector3.new(0, torqueMultiplier * 0.8, 0)
     end
     if boostEnabled and UserInputService:IsKeyDown(Enum.KeyCode.W) then
-        adjustedVelocity = adjustedVelocity + (forwardVector * boostStrength)
+        adjustedVelocity = adjustedVelocity + (forwardVector * boostStrength) -- Fixed to forward
     end
     if topSpeedCap > 0 then
         adjustedVelocity = adjustedVelocity.Magnitude > topSpeedCap and adjustedVelocity.Unit * topSpeedCap or adjustedVelocity
@@ -654,57 +538,37 @@ RunService.Stepped:Connect(function()
     end
 end)
 
--- Menu Logic
-WelcomeFrame.Visible = true
-TweenService:Create(WelcomeFrame, TWEEN_INFO, {Size = UDim2.new(0, 420, 0, 220)}):Play()
-delay(2, function()
-    TweenService:Create(WelcomeFrame, TWEEN_INFO, {Size = UDim2.new(0, 400, 0, 200)}):Play()
-    wait(0.4)
-    WelcomeFrame.Visible = false
-    VersionMenu.Visible = true
-    print("VersionMenu shown")
-end)
-
-FreeButton.MouseButton1Click:Connect(function()
-    ClickSound:Play()
-    VersionMenu.Visible = false
-    SetupSidebar()
-    Notify("Free Version Loaded - Press Right Shift to toggle", 5)
-    local isSidebarOpen = false
-    UserInputService.InputBegan:Connect(function(input, gameProcessed)
-        if not gameProcessed and input.KeyCode == Enum.KeyCode.RightShift then
-            print("Right Shift pressed")
-            if not isSidebarOpen then
+-- GUI Toggle Logic (V3 Exact with Credits in Notify)
+local isSidebarOpen = false
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.RightShift then
+        print("Right Shift pressed")
+        if not isSidebarOpen then
+            WelcomeFrame.Visible = true
+            print("WelcomeFrame set visible")
+            TweenService:Create(WelcomeFrame, TWEEN_INFO, {Size = UDim2.new(0, 420, 0, 220)}):Play()
+            delay(2, function()
+                TweenService:Create(WelcomeFrame, TWEEN_INFO, {Size = UDim2.new(0, 400, 0, 200)}):Play()
+                wait(0.4)
+                WelcomeFrame.Visible = false
+                print("WelcomeFrame hidden")
                 TweenService:Create(SidebarFrame, TWEEN_INFO, {Position = SIDEBAR_POSITION_ON}):Play()
                 isSidebarOpen = true
-                Notify("Vehicle Suite V4 by WeDontGAF Community", 3)
+                Notify("Vehicle Suite by WeDontGAF Community - Use responsibly!", 5)
                 print("Sidebar opened")
-            else
-                TweenService:Create(SidebarFrame, TWEEN_INFO, {Position = SIDEBAR_POSITION_OFF}):Play()
-                isSidebarOpen = false
-                print("Sidebar closed")
-            end
-            ClickSound:Play()
+            end)
+        else
+            TweenService:Create(SidebarFrame, TWEEN_INFO, {Position = SIDEBAR_POSITION_OFF}):Play()
+            isSidebarOpen = false
+            print("Sidebar closed")
         end
-    end)
+        ClickSound:Play()
+    end
 end)
 
-PaidButton.MouseButton1Click:Connect(function()
-    ClickSound:Play()
-    VersionMenu.Visible = false
-    PaidScreen.Visible = true
-    print("PaidScreen shown")
-end)
-
-BackButton.MouseButton1Click:Connect(function()
-    ClickSound:Play()
-    PaidScreen.Visible = false
-    VersionMenu.Visible = true
-    print("Back to VersionMenu")
-end)
-
--- Initial Checks
+-- Initial Checks and Setup (V3 Exact)
 if game.PlaceId ~= 891852901 then
     Notify("This script is for Greenville only!", 5)
 end
-print("Script V4 initialized")
+Notify("Press Right Shift to begin", 3)
+print("Script initialized")
