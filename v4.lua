@@ -27,7 +27,7 @@ local HIGHLIGHT_COLOR = Color3.fromRGB(60, 60, 60)
 
 -- Animation Settings
 local TWEEN_INFO = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-local FADE_TWEEN_INFO = TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+local WELCOME_TWEEN_INFO = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
 
 -- GUI Initialization
 local ScreenGui = Instance.new("ScreenGui")
@@ -452,43 +452,41 @@ local isSidebarOpen = false
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if not gameProcessed and input.KeyCode == Enum.KeyCode.RightShift then
         if not isSidebarOpen then
-            WelcomeFrame.Visible = true
-            WelcomeFrame.BackgroundTransparency = BACKGROUND_TRANSPARENCY
-            for _, child in pairs(WelcomeFrame:GetDescendants()) do
-                if child:IsA("GuiObject") then
-                    child.Visible = true
-                    if child:IsA("TextLabel") or child:IsA("ImageLabel") then
-                        child.BackgroundTransparency = 1
-                        child.TextTransparency = 0
-                        child.ImageTransparency = 0
-                    end
-                end
-            end
-            TweenService:Create(WelcomeFrame, TWEEN_INFO, {Size = UDim2.new(0, 370, 0, 200)}):Play()
-            delay(2, function()
-                -- Fade out the welcome frame
-                TweenService:Create(WelcomeFrame, FADE_TWEEN_INFO, {BackgroundTransparency = 1}):Play()
-                for _, child in pairs(WelcomeFrame:GetDescendants()) do
-                    if child:IsA("TextLabel") or child:IsA("ImageLabel") then
-                        TweenService:Create(child, FADE_TWEEN_INFO, {TextTransparency = 1, ImageTransparency = 1}):Play()
-                    end
-                end
-                wait(0.5)
-                WelcomeFrame.Visible = false
-                TweenService:Create(SidebarFrame, TWEEN_INFO, {Position = SIDEBAR_POSITION_ON}):Play()
-                isSidebarOpen = true
-                Notify("Track & Field Exploit by zerzll - Use responsibly!", 5)
-            end)
+            TweenService:Create(SidebarFrame, TWEEN_INFO, {Position = SIDEBAR_POSITION_ON}):Play()
+            isSidebarOpen = true
+            Notify("Track & Field Exploit by zerzll - Menu Opened!", 3)
         else
             TweenService:Create(SidebarFrame, TWEEN_INFO, {Position = SIDEBAR_POSITION_OFF}):Play()
             isSidebarOpen = false
+            Notify("Menu Closed", 2)
         end
         ClickSound:Play()
     end
 end)
 
+-- Automatic Menu Opening on Injection
+local function OpenMenuAutomatically()
+    WelcomeFrame.Visible = true
+    TweenService:Create(WelcomeFrame, WELCOME_TWEEN_INFO, {Size = UDim2.new(0, 370, 0, 200)}):Play()
+    delay(2, function()
+        TweenService:Create(WelcomeFrame, WELCOME_TWEEN_INFO, {Size = UDim2.new(0, 350, 0, 180), BackgroundTransparency = 1}):Play()
+        TweenService:Create(AvatarImage, WELCOME_TWEEN_INFO, {ImageTransparency = 1}):Play()
+        TweenService:Create(WelcomeText, WELCOME_TWEEN_INFO, {TextTransparency = 1}):Play()
+        wait(0.5)
+        WelcomeFrame.Visible = false
+        WelcomeFrame.BackgroundTransparency = BACKGROUND_TRANSPARENCY
+        AvatarImage.ImageTransparency = 0
+        WelcomeText.TextTransparency = 0
+        TweenService:Create(SidebarFrame, TWEEN_INFO, {Position = SIDEBAR_POSITION_ON}):Play()
+        isSidebarOpen = true
+        Notify("Track & Field Exploit by zerzll - Use responsibly!", 5)
+        ClickSound:Play()
+    end)
+end
+
 -- Initial Checks and Setup
 if game.PlaceId ~= 16426795556 then
     Notify("This script is for Track and Field (ID: 16426795556) only!", 5)
+else
+    OpenMenuAutomatically()
 end
-Notify("Press Right Shift to open/close", 3)
