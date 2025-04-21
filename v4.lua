@@ -27,6 +27,7 @@ local HIGHLIGHT_COLOR = Color3.fromRGB(60, 60, 60)
 
 -- Animation Settings
 local TWEEN_INFO = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+local FADE_TWEEN_INFO = TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
 
 -- GUI Initialization
 local ScreenGui = Instance.new("ScreenGui")
@@ -102,6 +103,7 @@ WelcomeFrame.BackgroundColor3 = BACKGROUND_COLOR
 WelcomeFrame.BackgroundTransparency = BACKGROUND_TRANSPARENCY
 WelcomeFrame.Parent = ScreenGui
 WelcomeFrame.ZIndex = 10
+WelcomeFrame.Visible = false
 
 local WelcomeCorner = Instance.new("UICorner")
 WelcomeCorner.CornerRadius = UDim.new(0, 15)
@@ -145,17 +147,17 @@ local function CreateButton(text, parent, callback)
     Button.Text = text
     Button.BorderSizePixel = 0
     Button.Parent = parent
-   
+    
     local ButtonCorner = Instance.new("UICorner")
     ButtonCorner.CornerRadius = UDim.new(0, 10)
     ButtonCorner.Parent = Button
-   
+    
     local ButtonGlow = Instance.new("UIStroke")
     ButtonGlow.Thickness = 1
     ButtonGlow.Color = GLOW_COLOR
     ButtonGlow.Transparency = GLOW_TRANSPARENCY
     ButtonGlow.Parent = Button
-   
+    
     Button.MouseEnter:Connect(function()
         TweenService:Create(Button, TWEEN_INFO, {BackgroundColor3 = HIGHLIGHT_COLOR, Size = UDim2.new(0, 260, 0, 55)}):Play()
     end)
@@ -176,7 +178,7 @@ local function CreateSlider(text, parent, min, max, default, callback)
     Container.Size = SLIDER_SIZE
     Container.BackgroundTransparency = 1
     Container.Parent = parent
-   
+    
     local Label = Instance.new("TextLabel")
     Label.Size = UDim2.new(1, 0, 0, 20)
     Label.BackgroundTransparency = 1
@@ -186,7 +188,7 @@ local function CreateSlider(text, parent, min, max, default, callback)
     Label.Text = text
     Label.TextXAlignment = Enum.TextXAlignment.Left
     Label.Parent = Container
-   
+    
     local SliderFrame = Instance.new("Frame")
     SliderFrame.Size = UDim2.new(1, 0, 0, 15)
     SliderFrame.Position = UDim2.new(0, 0, 0, 30)
@@ -196,7 +198,7 @@ local function CreateSlider(text, parent, min, max, default, callback)
     local SliderCorner = Instance.new("UICorner")
     SliderCorner.CornerRadius = UDim.new(0, 7)
     SliderCorner.Parent = SliderFrame
-   
+    
     local SliderKnob = Instance.new("TextButton")
     SliderKnob.Size = UDim2.new(0, 20, 0, 20)
     SliderKnob.Position = UDim2.new((default - min) / (max - min), -10, 0, 27.5)
@@ -207,7 +209,7 @@ local function CreateSlider(text, parent, min, max, default, callback)
     local KnobCorner = Instance.new("UICorner")
     KnobCorner.CornerRadius = UDim.new(0, 10)
     KnobCorner.Parent = SliderKnob
-   
+    
     local ValueLabel = Instance.new("TextLabel")
     ValueLabel.Size = UDim2.new(0, 50, 0, 20)
     ValueLabel.Position = UDim2.new(1, -60, 0, 55)
@@ -217,7 +219,7 @@ local function CreateSlider(text, parent, min, max, default, callback)
     ValueLabel.Font = TEXT_FONT
     ValueLabel.Text = tostring(default)
     ValueLabel.Parent = Container
-   
+    
     local dragging = false
     SliderKnob.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -248,7 +250,7 @@ local function CreateToggle(text, parent, default, callback)
     Container.Size = TOGGLE_SIZE
     Container.BackgroundTransparency = 1
     Container.Parent = parent
-   
+    
     local Label = Instance.new("TextLabel")
     Label.Size = UDim2.new(0.7, 0, 1, 0)
     Label.BackgroundTransparency = 1
@@ -258,7 +260,7 @@ local function CreateToggle(text, parent, default, callback)
     Label.Text = text
     Label.TextXAlignment = Enum.TextXAlignment.Left
     Label.Parent = Container
-   
+    
     local ToggleButton = Instance.new("TextButton")
     ToggleButton.Size = UDim2.new(0, 40, 0, 20)
     ToggleButton.Position = UDim2.new(0.8, 0, 0, 15)
@@ -272,7 +274,7 @@ local function CreateToggle(text, parent, default, callback)
     local ToggleCorner = Instance.new("UICorner")
     ToggleCorner.CornerRadius = UDim.new(0, 10)
     ToggleCorner.Parent = ToggleButton
-   
+    
     ToggleButton.MouseButton1Click:Connect(function()
         default = not default
         ToggleButton.BackgroundColor3 = default and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(200, 0, 0)
@@ -292,17 +294,17 @@ local function Notify(message, duration)
     Notification.BackgroundTransparency = BACKGROUND_TRANSPARENCY
     Notification.Parent = ScreenGui
     Notification.ZIndex = 15
-   
+    
     local NotifyCorner = Instance.new("UICorner")
     NotifyCorner.CornerRadius = UDim.new(0, 10)
     NotifyCorner.Parent = Notification
-   
+    
     local NotifyGlow = Instance.new("UIStroke")
     NotifyGlow.Thickness = 2
     NotifyGlow.Color = GLOW_COLOR
     NotifyGlow.Transparency = GLOW_TRANSPARENCY
     NotifyGlow.Parent = Notification
-   
+    
     local NotifyText = Instance.new("TextLabel")
     NotifyText.Size = UDim2.new(1, 0, 1, 0)
     NotifyText.BackgroundTransparency = 1
@@ -312,7 +314,7 @@ local function Notify(message, duration)
     NotifyText.Font = TEXT_FONT
     NotifyText.TextWrapped = true
     NotifyText.Parent = Notification
-   
+    
     TweenService:Create(Notification, TWEEN_INFO, {Position = UDim2.new(0.5, -125, 0, 10)}):Play()
     delay(duration or 3, function()
         TweenService:Create(Notification, TWEEN_INFO, {Position = UDim2.new(0.5, -125, 0, -70)}):Play()
@@ -341,7 +343,7 @@ local function ExtendFinishLine()
     local character = LocalPlayer.Character
     local hrp = character and character:FindFirstChild("HumanoidRootPart")
     if not hrp then return end
-   
+    
     local finishLine = Workspace:FindFirstChild("FinishLine") -- Adjust based on actual game structure
     if finishLine then
         local originalPos = finishLine.Position
@@ -356,7 +358,7 @@ local function InfiniteStamina()
     local humanoid = character and character:FindFirstChild("Humanoid")
     local hrp = character and character:FindFirstChild("HumanoidRootPart")
     if not humanoid or not hrp then return end
-   
+    
     local isCrouching = humanoid.WalkSpeed < 10 or humanoid.Sit or humanoid:GetState() == Enum.HumanoidStateType.Seated
     if not isCrouching and humanoid.MoveDirection.Magnitude > 0 then
         local moveStep = infStaminaSpeed / 60
@@ -451,10 +453,27 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if not gameProcessed and input.KeyCode == Enum.KeyCode.RightShift then
         if not isSidebarOpen then
             WelcomeFrame.Visible = true
+            WelcomeFrame.BackgroundTransparency = BACKGROUND_TRANSPARENCY
+            for _, child in pairs(WelcomeFrame:GetDescendants()) do
+                if child:IsA("GuiObject") then
+                    child.Visible = true
+                    if child:IsA("TextLabel") or child:IsA("ImageLabel") then
+                        child.BackgroundTransparency = 1
+                        child.TextTransparency = 0
+                        child.ImageTransparency = 0
+                    end
+                end
+            end
             TweenService:Create(WelcomeFrame, TWEEN_INFO, {Size = UDim2.new(0, 370, 0, 200)}):Play()
             delay(2, function()
-                TweenService:Create(WelcomeFrame, TWEEN_INFO, {Size = UDim2.new(0, 350, 0, 180)}):Play()
-                wait(0.3)
+                -- Fade out the welcome frame
+                TweenService:Create(WelcomeFrame, FADE_TWEEN_INFO, {BackgroundTransparency = 1}):Play()
+                for _, child in pairs(WelcomeFrame:GetDescendants()) do
+                    if child:IsA("TextLabel") or child:IsA("ImageLabel") then
+                        TweenService:Create(child, FADE_TWEEN_INFO, {TextTransparency = 1, ImageTransparency = 1}):Play()
+                    end
+                end
+                wait(0.5)
                 WelcomeFrame.Visible = false
                 TweenService:Create(SidebarFrame, TWEEN_INFO, {Position = SIDEBAR_POSITION_ON}):Play()
                 isSidebarOpen = true
